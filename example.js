@@ -21,7 +21,8 @@ program
   .option('-l, --locationID <locationID>', 'LocationID to subscribe to. If a labelID, zoneID, mapID or mac is not provided. You will receive all events related to a location. , ', null)
   .option('-a, --areaZoneID <areaZoneID>', 'Area ZoneID to subscribe to', null)
   .option('-x, --proxZoneID <proxZoneID>', 'Proximity ZoneID to subscribe to', null)
-  .option('-k, --areazoneslist <areazoneslist>', 'List of area zones ID to subscribe to', list)
+    .option('-k, --areazoneslist <areazoneslist>', 'List of area zones ID to subscribe to', list)
+    .option('-h, --proxzoneslist <proxzoneslist>', 'List of proximity zones ID to subscribe to', list_proxzones)
   .option('-t, --token <token>', 'Authentication token to use when subscribing', null)
   .option('-n, --namespace <namespace>', 'Namespace to connect to.', null)
   .option('--labelID <labelID>', 'LabelID To subscribe to', null)
@@ -35,6 +36,10 @@ program
 function list(val) {
     val = val.split(',');
     return val.map(x => x.trim()).map(x => parseInt(x, 10));
+}
+function list_proxzones(val) {
+    val = val.split(',');
+    return val.map(x => x.trim());
 }
 if (!program.locationID) {
   error('locationID required');
@@ -69,6 +74,7 @@ log(`ServerURL: ${serverURL}`);
 log(`Path: ${path}`);
 log(`Namespace: ${program.namespace}`);
 log(`Area zones list: ${program.areazoneslist}`);
+log(`Proximity zones list: ${program.proxzoneslist}`);
 
 
 let fullUrl =  program.namespace !== null ? `${serverURL}/${program.namespace}` : `${serverURL}`;
@@ -159,13 +165,18 @@ function getSubscriptions(program) {
   if (program.proxZoneID) {
     subscribeData.push({proxZoneID: program.proxZoneID, locationID: program.locationID});
   }
-  if (!program.mapID && !program.labelID && !program.mac && !program.areaZoneID && !program.proxZoneID && !program.areazoneslist) {
+  if (!program.mapID && !program.labelID && !program.mac && !program.areaZoneID && !program.proxZoneID && !program.areazoneslist && !program.proxzoneslist) {
     subscribeData.push({locationID: program.locationID});
   }
   if (program.areazoneslist) {
       for (var id of program.areazoneslist){
           subscribeData.push({areaZoneID: id, locationID: program.locationID});
       }
+  }
+  if (program.proxzoneslist) {
+    for (var id of program.proxzoneslist) {
+      subscribeData.push({proxZoneID: id, locationID: program.locationID});
+    }
   }
   return subscribeData;
 }
