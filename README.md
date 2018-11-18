@@ -12,8 +12,12 @@
 
 After [`nodejs`][nodejs] has been installed run `npm install` in the directory of the project to install the necessary dependencies
 
+### Example Usage - Asset updates and zone updates
 
-### Example Usage
+```node example.js -l location_id -t token -k "areazone_1,areazone_2,areazone_3 " -s tags.meridianapps.com -h "proxzone_1,proxzone_2" -m map_id```
+
+
+### Example Usage - Zone updates only
 
 ```node example.js -l location_id -t token -k "areazone_1,areazone_2,areazone_3 " -s tags.meridianapps.com -h "proxzone_1,proxzone_2"```
 
