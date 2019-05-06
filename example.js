@@ -83,9 +83,10 @@ log(`FULL URL ${fullUrl}`);
 const client = socket_client.connect(fullUrl, {path: path});
 
 function logEvent(event, data) {
-  log(`Time: ${new Date().toISOString()}`);
+  //log(`Time: ${new Date().toISOString()}`);
   log(`Event: ${event.toString()}`);
-  log(`Data: ${prettyFormatted(data || {})}`);
+    if (event == `zone_update`)
+      log(`Data: ${prettyFormatted(data || {})}`);
 }
 
 client.on('connect', (data) => {
